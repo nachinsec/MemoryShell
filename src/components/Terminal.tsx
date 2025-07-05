@@ -7,6 +7,8 @@ type HistoryEntry = {
 }
 
 export default function Terminal() {
+  const [command, setCommand] = createSignal<string[]>([])
+  const [commandIndex, setCommandIndex] = createSignal<number | null>(null)
   const [history, setHistory] = createSignal<HistoryEntry[]>([])
   const [input, setInput] = createSignal('')
   let inputRef: HTMLInputElement | undefined
@@ -45,8 +47,34 @@ export default function Terminal() {
     }
 
     setHistory([...history(), { command: value, output }])
+    setCommand([...command(), value])
     setInput('')
+    setCommandIndex(null)
     setTimeout(() => inputRef?.focus(), 50)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const hist = command()
+      if (!hist.length) return
+      const idx = commandIndex() === null ? hist.length - 1 : Math.max(0, commandIndex()! - 1)
+      setInput(hist[idx])
+      setCommandIndex(idx)
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const hist = command()
+      if (!hist.length) return
+      if (commandIndex() === null) return
+      const idx = commandIndex === null ? hist.length : commandIndex()! + 1
+      if (idx === hist.length) {
+        setInput('')
+        setCommandIndex(null)
+      } else {
+        setInput(hist[idx])
+        setCommandIndex(idx)
+      }
+    }
   }
 
   createEffect(() => {
@@ -54,12 +82,13 @@ export default function Terminal() {
     if (!scrollRef) return
     scrollRef.scrollTop = scrollRef.scrollHeight
   })
+
   onCleanup(() => {
     /* nada por ahora */
   })
 
   return (
-    <div class="bg-black text-[var(--color-neon)] p-6 rounded-xl shadow-2xl font-mono max-w-2xl mx-auto terminal-border terminal-scanlines text-left relative min-w-[50rem]">
+    <div class="bg-black text-[var(--color-neon)] p-6 rounded-xl shadow-2xl font-mono max-w-2xl mx-auto terminal-border terminal-scanlines text-left relative min-w-[20rem] xs:max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl w-full">
       <div ref={(el) => (scrollRef = el)} class="overflow-y-auto h-72 mb-4 pr-2 terminal-scrollbar">
         {history().map((entry, _) => (
           <div class="mb-2">
@@ -76,6 +105,7 @@ export default function Terminal() {
           class="bg-transparent border-none outline-none flex-1 text-[var(--color-neon)] placeholder-[var(--color-neon-blue)] text-lg"
           value={input()}
           onInput={(e) => setInput(e.currentTarget.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Write a command..."
           autofocus
           autocomplete="off"
