@@ -11,7 +11,7 @@ export default function App() {
       </header>
       <Terminal />
       <footer class="mt-8 text-xs text-gray-500">
-        © 2025 Nacho •{' '}
+        © 2025 Nachinsec •{' '}
         <a href="https://github.com/nachinsec" class="underline">
           GitHub
         </a>

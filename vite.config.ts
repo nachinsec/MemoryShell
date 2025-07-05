@@ -36,6 +36,13 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    allowedHosts: [
+      'localhost',
+      '127.0.0.1',
+      '0.0.0.0',
+      'ufamie-ip-79-116-218-130.tunnelmole.net',
+      '.loca.lt',
+    ],
   },
   build: {
     target: 'esnext',
