@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-neon: #39ff14;
+  --color-neon-pink: #ff00cc;
+  --color-neon-blue: #00fff7;
+  --color-gradient-from: #1a1a1a;
+}
+body {
+  font-family: 'Fira Code', monospace;
+}
+
+.terminal-scrollbar::-webkit-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-track {
+  display: none;
+}
