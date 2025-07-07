@@ -66,7 +66,7 @@ export default function Terminal() {
       const hist = command()
       if (!hist.length) return
       if (commandIndex() === null) return
-      const idx = commandIndex === null ? hist.length : commandIndex()! + 1
+      const idx = commandIndex() === null ? hist.length : commandIndex()! + 1
       if (idx === hist.length) {
         setInput('')
         setCommandIndex(null)
