@@ -8,11 +8,25 @@ interface MemoryShellDB extends DBSchema {
       content: string
     }
   }
+  plugins: {
+    key: string
+    value: {
+      id: number
+      name: string
+      code: string
+      enabled: boolean
+    }
+  }
 }
 
-const dbPromise = openDB<MemoryShellDB>('memoryshell', 1, {
+const dbPromise = openDB<MemoryShellDB>('memoryshell', 2, {
   upgrade(db) {
-    db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true })
+    if (!db.objectStoreNames.contains('notes')) {
+      db.createObjectStore('notes', { keyPath: 'id', autoIncrement: true })
+    }
+    if (!db.objectStoreNames.contains('plugins')) {
+      db.createObjectStore('plugins', { keyPath: 'id' })
+    }
   },
 })
 
@@ -30,4 +44,24 @@ export const getAllNotes = async () => {
 export const clearNotes = async () => {
   const db = await dbPromise
   await db.clear('notes')
+}
+
+export const addPlugin = async (plugin: {
+  id: number
+  name: string
+  code: string
+  enabled: boolean
+}) => {
+  const db = await dbPromise
+  await db.put('plugins', plugin)
+}
+
+export const getAllPlugins = async () => {
+  const db = await dbPromise
+  return db.getAll('plugins')
+}
+
+export const removePlugin = async (id: string) => {
+  const db = await dbPromise
+  await db.delete('plugins', id)
 }

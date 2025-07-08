@@ -5,7 +5,7 @@ export const Settings = (props: IconProps) => {
   return (
     <svg
       fill="none"
-      stroke-width="2"
+      stroke-width="1.5"
       xmlns="http://www.w3.org/2000/svg"
       stroke={color}
       stroke-linecap="round"
