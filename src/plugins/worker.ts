@@ -37,14 +37,12 @@ export function createPluginWorker(pluginCode: string): Promise<WorkerPluginHand
     const blob = new Blob([workerScript], { type: 'application/javascript' })
     const worker = new Worker(URL.createObjectURL(blob))
 
-    let ready = false
     let name = ''
     let description = ''
 
     worker.onmessage = (e) => {
       const data = e.data
       if (data.ready) {
-        ready = true
         name = data.name
         description = data.description
         resolve({

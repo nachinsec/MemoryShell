@@ -8,7 +8,6 @@ export default function PluginLoaderForm(props: {
 }) {
   const [pluginCode, setPluginCode] = createSignal('')
   const [pluginName, setPluginName] = createSignal('')
-  const [pluginDesc, setPluginDesc] = createSignal('')
   const [pluginError, setPluginError] = createSignal<string | null>(null)
   const [loading, setLoading] = createSignal(false)
 
